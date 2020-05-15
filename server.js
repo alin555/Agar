@@ -40,7 +40,7 @@ app.get("/move", function (req, res) {
 
 setInterval(() => {
     players.forEach(player => {
-
+        maxSize = [];
         /////////// Eating apples
         apples.forEach((apple, index) => {
 
@@ -62,22 +62,45 @@ setInterval(() => {
             }
 
             if (player.positionY <= (enemy.positionY + enemy.size) && (player.positionY + player.size) >= enemy.positionY) {
+
                 if (player.positionX <= (enemy.positionX + enemy.size) && (player.positionX + player.size) >= enemy.positionX) {
-                    if (player.positionX > safeArea && player.positionY > safeArea) {
+
+                    if (player.positionX > safeArea || player.positionY > safeArea) {
+
                         if (player.size > enemy.size) {
+
+                            if(player.size < boardHeight/2) {
+                                player.size += 15;
+                            } 
 
                             enemy.size = 70;
                             enemy.positionX = 1;
                             enemy.positionY = 1;
-                            player.size += 15;
                             player.score += 2;
+
+                            players.forEach(max => {
+                                maxSize.push(max.size);
+                            });
+
+                            safeArea = Math.max(...maxSize) + 100;
+                            
+
                         } else if (player.size < enemy.size) {
-    
+
+                            if(enemy.size < boardHeight/2) {
+                                enemy.size += 15;
+                            } 
                             player.size = 70;
                             player.positionX = 1;
                             player.positionY = 1;
-                            enemy.size += 15;
                             enemy.score += 2;
+
+                            players.forEach(max => {
+                                maxSize.push(max.size);
+                            });  
+
+                            safeArea = Math.max(...maxSize) + 100;
+                            
                         }
                     }
 
@@ -100,7 +123,7 @@ setInterval(() => {
         } else if (player.positionY <= 0) {
             player.direction = "none";
             player.positionY = 1;
-        } 
+        }
 
         switch (player.direction) {
             case "up":
