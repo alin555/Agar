@@ -8,6 +8,7 @@ const boardWidth = 1200;
 var players = [];
 var apples = [];
 var counter = 0;
+var safeArea = 200;
 
 
 app.use("/", express.static(__dirname + "/"));
@@ -62,21 +63,24 @@ setInterval(() => {
 
             if (player.positionY <= (enemy.positionY + enemy.size) && (player.positionY + player.size) >= enemy.positionY) {
                 if (player.positionX <= (enemy.positionX + enemy.size) && (player.positionX + player.size) >= enemy.positionX) {
-                    if (player.size > enemy.size) {
+                    if (player.positionX > safeArea && player.positionY > safeArea) {
+                        if (player.size > enemy.size) {
 
-                        enemy.size = 70;
-                        enemy.positionX = 1;
-                        enemy.positionY = 1;
-                        player.size += 15;
-                        player.score += 2;
-                    } else if (player.size < enemy.size) {
-
-                        player.size = 70;
-                        player.positionX = 1;
-                        player.positionY = 1;
-                        enemy.size += 15;
-                        enemy.score += 2;
+                            enemy.size = 70;
+                            enemy.positionX = 1;
+                            enemy.positionY = 1;
+                            player.size += 15;
+                            player.score += 2;
+                        } else if (player.size < enemy.size) {
+    
+                            player.size = 70;
+                            player.positionX = 1;
+                            player.positionY = 1;
+                            enemy.size += 15;
+                            enemy.score += 2;
+                        }
                     }
+
                 }
             }
 
